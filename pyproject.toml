@@ -1,0 +1,55 @@
+[project]
+name = "disco-lando"
+version = "0.1.0"
+description = "Assistant Star Citizen en français — socle données et CLI (Phase 1)"
+requires-python = ">=3.12"
+dependencies = [
+    "rapidfuzz>=3.9",
+    "Metaphone>=0.6",
+    "PyYAML>=6.0",
+    "typer>=0.12",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+]
+
+[project.optional-dependencies]
+# flake8 : la CI exige zéro F401/F811/F841 — le code mort ne repousse pas.
+# httpx et non httpx2 : c'est `starlette.testclient` qui en dépend, et il fait
+# `import httpx` (le module s'appelle `httpx`, pas `httpx2`). httpx2 expose un
+# module `httpx2` que rien ici n'importe ; la suite ne passait avec lui que
+# parce que httpx restait installé par transitivité. À rebasculer le jour où
+# Starlette importera vraiment httpx2, pas avant.
+dev = ["pytest>=8.0", "httpx>=0.27", "flake8>=7.0"]
+# Frontend local — push-to-talk, capture, lecture (Phase 4).
+# whisper.cpp reste un binaire à compiler (scripts/build_whisper.ps1) ; Piper,
+# lui, s'installe par pip depuis son passage sous OHF-Voice/piper1-gpl.
+local = ["sounddevice>=0.4", "soundfile>=0.12", "numpy>=1.26", "keyboard>=0.13",
+         "piper-tts>=1.4"]
+# Bot Discord (Phase 5). py-cord et discord.py s'installent tous deux comme le
+# paquet `discord` : ils ne peuvent pas coexister.
+#
+# `py-cord[voice]` et non `py-cord` seul : depuis la 2.7, le support vocal
+# repose sur `davey` et `discord.voice.VoiceClient` — PyNaCl ne suffit plus.
+# À noter : la *réception* vocale reste cassée en amont depuis que Discord
+# impose DAVE. Voir docs/PHASE5_DISCORD.md.
+discord = ["py-cord[voice]>=2.8", "openwakeword>=0.6", "onnxruntime>=1.17",
+           "numpy>=1.26", "piper-tts>=1.4"]
+
+[project.scripts]
+disco = "disco_lando.cli:app"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+disco_lando = ["schema.sql", "guilde/schema.sql", "guilde/web/*"]
+
+[tool.pytest.ini_options]
+# Les anciens bancs llama.cpp/whisper.cpp sont des sources tierces conservées
+# pour référence manuelle. Sans cette borne, `pytest` à la racine collectait
+# leurs dépendances Appium/wget avant les 1 078 tests du projet.
+testpaths = ["tests"]
