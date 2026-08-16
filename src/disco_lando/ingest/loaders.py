@@ -1,0 +1,170 @@
+"""Chargement scunpacked-data -> SQLite — la **façade**.
+
+Chaque loader lit sa source, produit ses lignes et déclare ses
+alias. Aucun ne connaît les autres : l'ordre d'appel dans `run.py`
+ne dépend que des clés étrangères.
+
+**Ce fichier ne porte plus de code.** Il réexporte, exactement
+comme `queries.py` : un chargeur neuf va dans son module de
+domaine et se réexporte ici, pour que les appelants — `run.py`,
+les tests, le lanceur — ne changent jamais de porte. C'est la
+leçon du découpage de `queries.py`, qui a déjà fait ses preuves.
+"""
+
+from __future__ import annotations
+
+from .contrats import (  # noqa: F401
+    _CLE_OBJECTIF,
+    _SITE_DE_MISSION,
+    _build_mission_groups,
+    _fill_missing_systems,
+    _prefixe_objectif,
+    _standing,
+    consignes_redigees,
+    load_contracts,
+    load_sites_de_mission,
+)
+from .fabrication import (  # noqa: F401
+    _DETAIL_METHODE,
+    _NIVEAUX,
+    _walk_modifiers,
+    _walk_requirements,
+    load_blueprints,
+    load_methodes_de_raffinage,
+)
+from .lieux import (  # noqa: F401
+    _completer_sauts_par_gateways,
+    _load_positions,
+    load_commerce,
+    load_starmap,
+    load_trade_flows,
+)
+from .monde import (  # noqa: F401
+    load_factions,
+    load_manufacturers,
+    load_resources,
+)
+from .objets import (  # noqa: F401
+    _CLASSES_DE_PORTEUR,
+    _DEV_MARQUEURS,
+    _MARQUEURS_DE_PORTEUR,
+    _SUFFIXES_DE_PORTEUR,
+    _UNITES_SCU,
+    _WEAPON_CLASSES,
+    _WEAPON_KINDS,
+    _charger_ports,
+    _lootabilite,
+    _porteur_exclusif,
+    _rayon_propre,
+    _usability,
+    _volume_uscu,
+    _weapon_family,
+    load_contenances,
+    load_items,
+)
+from .socle import (  # noqa: F401
+    AliasCollector,
+    PLACEHOLDER,
+    SYSTEMS,
+    _DIFFICULTIES,
+    _bool,
+    _location_id,
+    _nombre,
+    _prose_utile,
+    load_labels,
+    parse_debug_name,
+)
+from .statistiques import (  # noqa: F401
+    _AXES_ARMURE,
+    _TYPES_EN_PIPS,
+    _TYPES_EN_STD,
+    _armor_stats,
+    _charger_modificateur_accessoire,
+    _component_stats,
+    _lignes_reseau,
+    _mecanique_stats,
+    _porte_une_stat,
+    _reseau_de_ressource,
+    _weapon_stats,
+)
+from .vaisseaux import (  # noqa: F401
+    _SOURCES_TOURELLES,
+    _jetons_de_vaisseaux,
+    _walk_loadout,
+    load_composants_exposes,
+    load_delais_bouclier,
+    load_dps_soutenu,
+    load_emp,
+    load_ships,
+)
+
+__all__ = [
+    "_CLE_OBJECTIF",
+    "_SITE_DE_MISSION",
+    "_build_mission_groups",
+    "_fill_missing_systems",
+    "_prefixe_objectif",
+    "_standing",
+    "consignes_redigees",
+    "load_contracts",
+    "load_sites_de_mission",
+    "_DETAIL_METHODE",
+    "_NIVEAUX",
+    "_walk_modifiers",
+    "_walk_requirements",
+    "load_blueprints",
+    "load_methodes_de_raffinage",
+    "_completer_sauts_par_gateways",
+    "_load_positions",
+    "load_commerce",
+    "load_starmap",
+    "load_trade_flows",
+    "load_factions",
+    "load_manufacturers",
+    "load_resources",
+    "_CLASSES_DE_PORTEUR",
+    "_DEV_MARQUEURS",
+    "_MARQUEURS_DE_PORTEUR",
+    "_SUFFIXES_DE_PORTEUR",
+    "_UNITES_SCU",
+    "_WEAPON_CLASSES",
+    "_WEAPON_KINDS",
+    "_charger_ports",
+    "_lootabilite",
+    "_porteur_exclusif",
+    "_rayon_propre",
+    "_usability",
+    "_volume_uscu",
+    "_weapon_family",
+    "load_contenances",
+    "load_items",
+    "AliasCollector",
+    "PLACEHOLDER",
+    "SYSTEMS",
+    "_DIFFICULTIES",
+    "_bool",
+    "_location_id",
+    "_nombre",
+    "_prose_utile",
+    "load_labels",
+    "parse_debug_name",
+    "_AXES_ARMURE",
+    "_TYPES_EN_PIPS",
+    "_TYPES_EN_STD",
+    "_armor_stats",
+    "_charger_modificateur_accessoire",
+    "_component_stats",
+    "_lignes_reseau",
+    "_mecanique_stats",
+    "_porte_une_stat",
+    "_reseau_de_ressource",
+    "_weapon_stats",
+    "_SOURCES_TOURELLES",
+    "_jetons_de_vaisseaux",
+    "_walk_loadout",
+    "load_composants_exposes",
+    "load_delais_bouclier",
+    "load_dps_soutenu",
+    "load_emp",
+    "load_ships",
+]
